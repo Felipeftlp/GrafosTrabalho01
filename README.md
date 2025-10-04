@@ -83,4 +83,5 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 
 ## 👨‍💻 Autores
 - **Felipe Freitas Lopes**
+- **Giliardo Júlio de Medeiros Júnior**
 - **[COLOQUEM SEUS NOMES EM ORDEM ALFABÉTICA AQUI]**
