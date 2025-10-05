@@ -1,6 +1,6 @@
 class Grafo:
     """
-    Classe para representar um grafo e gerar suas principais estruturas de dados:
+    Classe para representar um grafo e gerar as suas principais estruturas de dados:
     - Lista de Adjacência
     - Matriz de Adjacência
     - Matriz de Incidência
@@ -55,3 +55,41 @@ class Grafo:
             if idx2 is not None:
                 matriz_inc[idx2][i] = 1
         return matriz_inc
+
+    """
+    Abaixo estão as funções resultantes dos itens 5 a 8 da lista:
+    - Grau de cada vértice
+    - vertice adjacente
+    - total de vertices
+    - total de arestas
+    """
+
+    def get_grau_vertices(self):
+        """
+        Item 5 - Retorna o grau dos vértices.
+        """
+        grau_vertices = {}
+        for v in self.vertices_ordenados:
+            grau_vertices[f"d({v})"] = sum(v in aresta for aresta in self.arestas)
+        return grau_vertices
+
+    def is_adjacente(self, v1, v2):
+        """
+        Item 6 - Verifica se os vertices são adjacentes.
+        """
+        for aresta in self.arestas:
+            if v1 in aresta and v2 in aresta:
+                return True
+        return False
+
+    def get_num_vertices(self):
+        """
+        Item 7 - Retorna o total de vértices
+        """
+        return self.num_vertices
+
+    def get_num_arestas(self):
+        """
+        Item 8 - Retorna o total de arestas
+        """
+        return self.num_arestas

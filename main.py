@@ -90,6 +90,8 @@ def main():
         
     meu_grafo = Grafo(vertices, arestas)
     imprimir_resultados(meu_grafo)
+    meu_grafo.get_grau_vertices()
+    print(meu_grafo.is_adjacente("1","2"))
 
 if __name__ == "__main__":
     main()
