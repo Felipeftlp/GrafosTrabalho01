@@ -90,8 +90,15 @@ def main():
         
     meu_grafo = Grafo(vertices, arestas)
     imprimir_resultados(meu_grafo)
-    meu_grafo.get_grau_vertices()
-    print(meu_grafo.is_adjacente("1","2"))
+
+    print("\n\n" + "=" * 50)
+    print("                    Itens 5-8")
+    print("=" * 50)
+
+    print(f"Grau dos vértices: {meu_grafo.get_grau_vertices()}")
+    print(f"Vértice 1 e 2 são adjacentes: {meu_grafo.is_adjacente('1', '2')}")
+    print(f"Quantidade de vértices: {meu_grafo.get_num_vertices()}")
+    print(f"Quantidade de arestas: {meu_grafo.get_num_arestas()}")
 
 if __name__ == "__main__":
     main()

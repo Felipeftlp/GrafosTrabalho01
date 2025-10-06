@@ -73,7 +73,11 @@ class Grafo:
             grau_vertices[f"d({v})"] = sum(v in aresta for aresta in self.arestas)
         return grau_vertices
 
-    def is_adjacente(self, v1, v2):
+    def is_adjacente(
+            self,
+            v1: str,
+            v2: str
+    ) -> bool:
         """
         Item 6 - Verifica se os vertices são adjacentes.
         """
@@ -82,13 +86,13 @@ class Grafo:
                 return True
         return False
 
-    def get_num_vertices(self):
+    def get_num_vertices(self) -> int:
         """
         Item 7 - Retorna o total de vértices
         """
         return self.num_vertices
 
-    def get_num_arestas(self):
+    def get_num_arestas(self) -> int:
         """
         Item 8 - Retorna o total de arestas
         """
