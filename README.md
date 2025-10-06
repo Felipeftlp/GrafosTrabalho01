@@ -15,7 +15,9 @@ O projeto está organizado de forma modular para separar responsabilidades e fac
 
 - **`main.py`**: Ponto de entrada do programa. Responsável pela interação com o usuário (coleta de dados do grafo) e pela exibição dos resultados.
 - **`grafo.py`**: Contém a classe `Grafo`, que modela o grafo e seus métodos para gerar as representações básicas (lista/matriz de adjacência, matriz de incidência).
+- **`digrafo.py`**: Contém a classe `Digrafo`, que modela grafos direcionados e implementa BFS.
 - **`utils.py`**: Módulo com funções auxiliares e de conversão, como `matriz -> lista` e `lista -> matriz`.
+- **`test_bfs.py`**: Testes automatizados para validar as implementações de BFS e operações com vértices.
 - **`.gitignore`**: Define os arquivos e pastas que devem ser ignorados pelo Git (ex: `__pycache__`, ambientes virtuais).
 - **`README.md`**: Documentação do projeto (este arquivo).
 
@@ -56,6 +58,10 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 -   Representação de grafos por **Matriz de Incidência**.
 -   Conversão de **Matriz de Adjacências para Lista de Adjacências**.
 -   Conversão de **Lista de Adjacências para Matriz de Adjacências**.
+-   **(9)** Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
+-   **(10)** Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
+-   **(13)** Busca em Largura (BFS) em grafos não-direcionados.
+-   **(19)** Busca em Largura (BFS) em dígrafos.
 
 ### A Implementar 🚧
 
@@ -64,11 +70,11 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 -   (6) Função que determina se dois vértices são adjacentes.
 -   (7) Função que determina o número total de vértices.
 -   (8) Função que determina o número total de arestas.
--   (9) Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
--   (10) Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
+<!-- -   (9) Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências. -->
+<!-- -   (10) Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências. -->
 -   (11) Função que determina se um grafo é conexo ou não.
 -   (12) **Determinar se um grafo é bipartido (OPC = 1,0 ponto)**
--   (13) Busca em Largura, a partir de um vértice específico.
+<!-- -   (13) Busca em Largura, a partir de um vértice específico. -->
 -   (14) Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice específico.
 -   (15) Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a função *lowpt*.
 
@@ -76,7 +82,7 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 -   (16) Representação do Dígrafo a partir da Matriz de Adjacências.
 -   (17) Representação do Dígrafo a partir da Matriz de Incidência.
 -   (18) **Determinação do Grafo Subjacente (OPC= 0,5 ponto)**
--   (19) Busca em largura.
+<!-- -   (19) Busca em largura. -->
 -   (20) Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento.
 
 ---
@@ -84,4 +90,5 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 ## 👨‍💻 Autores
 - **Felipe Freitas Lopes**
 - **Giliardo Júlio de Medeiros Júnior**
+- **Ianco Soares Oliveira**
 - **[COLOQUEM SEUS NOMES EM ORDEM ALFABÉTICA AQUI]**
