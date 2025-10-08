@@ -282,3 +282,162 @@ class Grafo:
             'pais': pais,
             'alcancaveis': visitados
         }
+    
+    # =========================================================================
+    # ITEM 11 - VERIFICAR SE O GRAFO É CONEXO
+    # =========================================================================
+    def is_conexo(self) -> bool:
+        """
+        Verifica se o grafo é conexo.
+        Um grafo é conexo se existe um caminho entre qualquer par de vértices.
+        A verificação é feita realizando uma busca (BFS ou DFS) a partir de um
+        vértice arbitrário e checando se todos os outros vértices foram visitados.
+
+        Returns:
+            bool: True se o grafo for conexo, False caso contrário.
+        """
+        if self.num_vertices == 0:
+            return True  # Um grafo vazio é considerado conexo.
+
+        # Pega um vértice qualquer para iniciar a busca
+        vertice_inicial = self.vertices_ordenados[0]
+        
+        # Usa a busca em largura já implementada para encontrar todos os vértices alcançáveis
+        resultado_bfs = self.busca_em_largura(vertice_inicial)
+        vertices_alcancaveis = resultado_bfs['alcancaveis']
+        
+        # Se o número de vértices alcançáveis é igual ao total, o grafo é conexo
+        return len(vertices_alcancaveis) == self.num_vertices
+
+    
+    # =========================================================================
+    # ITEM 14 - BUSCA EM PROFUNDIDADE (DFS) COM ARESTAS DE RETORNO
+    # =========================================================================
+    def busca_em_profundidade(self):
+        """
+        Realiza uma Busca em Profundidade (DFS) em todo o grafo, lidando com
+        múltiplas componentes conexas, e identifica as arestas de retorno.
+        
+        Returns:
+            dict: Dicionário contendo:
+                - 'ordem_visitacao': Lista com a ordem que os vértices foram visitados.
+                - 'pais': Dicionário que mapeia cada vértice ao seu pai na árvore DFS.
+                - 'arestas_retorno': Lista de tuplas representando as arestas de retorno.
+        """
+        lista_adj = self.criar_lista_adjacencia()
+        visitados = set()
+        pais = {v: None for v in self.vertices_ordenados}
+        ordem_visitacao = []
+        arestas_retorno = []
+
+        def _dfs_recursiva(u, pai):
+            visitados.add(u)
+            ordem_visitacao.append(u)
+            pais[u] = pai
+
+            for v in lista_adj[u]:
+                if v == pai:
+                    continue  # Ignora a aresta que leva de volta ao pai imediato
+                
+                if v in visitados:
+                    # Se v já foi visitado e não é o pai, (u, v) é uma aresta de retorno
+                    # Adiciona de forma ordenada para evitar duplicatas como (A,B) e (B,A)
+                    aresta = tuple(sorted((u, v)))
+                    if aresta not in arestas_retorno:
+                        arestas_retorno.append(aresta)
+                else:
+                    # Se v não foi visitado, continua a busca a partir dele
+                    _dfs_recursiva(v, u)
+
+        # Itera sobre todos os vértices para garantir que grafos desconexos sejam percorridos
+        for vertice in self.vertices_ordenados:
+            if vertice not in visitados:
+                _dfs_recursiva(vertice, None)
+        
+        return {
+            'ordem_visitacao': ordem_visitacao,
+            'pais': pais,
+            'arestas_retorno': arestas_retorno
+        }
+
+    # =========================================================================
+    # ITEM 15 - DETERMINAÇÃO DE ARTICULAÇÕES E BLOCOS (BICONECTIVIDADE)
+    # =========================================================================
+    def determinar_articulacoes_blocos(self):
+        """
+        Encontra todos os pontos de articulação (vértices de corte) e blocos
+        (componentes biconexos) do grafo, utilizando o algoritmo de Tarjan
+        baseado em DFS e na função low-point (lowpt).
+        
+        Returns:
+            dict: Dicionário contendo:
+                - 'articulacoes': Um conjunto com os pontos de articulação.
+                - 'blocos': Uma lista de conjuntos, onde cada conjunto representa um bloco.
+        """
+        lista_adj = self.criar_lista_adjacencia()
+        visitados = set()
+        d = {}  # Tempo de descoberta (discovery time)
+        low = {} # Função low-point (lowpt)
+        pais = {v: None for v in self.vertices_ordenados}
+        articulacoes = set()
+        pilha_arestas = []
+        blocos = []
+        self.tempo = 0
+
+        def _dfs_biconectividade(u, p):
+            visitados.add(u)
+            pais[u] = p
+            self.tempo += 1
+            d[u] = low[u] = self.tempo
+            filhos_dfs = 0
+
+            for v in lista_adj[u]:
+                if v == p:
+                    continue
+
+                if v in visitados:
+                    # Aresta de retorno encontrada
+                    low[u] = min(low[u], d[v])
+                    if d[v] < d[u]: # Garante que a aresta só é adicionada uma vez
+                       pilha_arestas.append(tuple(sorted((u, v))))
+                else:
+                    # Aresta de árvore
+                    filhos_dfs += 1
+                    pilha_arestas.append(tuple(sorted((u, v))))
+                    _dfs_biconectividade(v, u)
+
+                    # Após a recursão, atualiza o low-point de u
+                    low[u] = min(low[u], low[v])
+
+                    # Verifica a condição de articulação
+                    if (p is not None and low[v] >= d[u]) or (p is None and filhos_dfs > 1):
+                        articulacoes.add(u)
+                        
+                        # Extrai um bloco da pilha de arestas
+                        bloco_atual = set()
+                        aresta_topo = None
+                        while aresta_topo != tuple(sorted((u,v))):
+                            aresta_topo = pilha_arestas.pop()
+                            bloco_atual.add(aresta_topo[0])
+                            bloco_atual.add(aresta_topo[1])
+                        blocos.append(bloco_atual)
+
+        for vertice in self.vertices_ordenados:
+            if vertice not in visitados:
+                _dfs_biconectividade(vertice, None)
+                
+                # Se a pilha não estiver vazia ao final da DFS de uma componente,
+                # as arestas restantes formam um bloco.
+                if pilha_arestas:
+                    bloco_restante = set()
+                    while pilha_arestas:
+                        aresta = pilha_arestas.pop()
+                        bloco_restante.add(aresta[0])
+                        bloco_restante.add(aresta[1])
+                    if bloco_restante:
+                         blocos.append(bloco_restante)
+        
+        return {
+            'articulacoes': articulacoes,
+            'blocos': blocos
+        }

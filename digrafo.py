@@ -128,3 +128,73 @@ class Digrafo:
             'pais': pais,
             'alcancaveis': visitados
         }
+        
+    # =========================================================================
+    # ITEM 20 - BUSCA EM PROFUNDIDADE (DFS) PARA DÍGRAFOS
+    # =========================================================================
+    def busca_em_profundidade_completa(self):
+        """
+        Realiza uma Busca em Profundidade (DFS) completa no dígrafo, calculando
+        os tempos de entrada (descoberta) e saída (finalização) para cada vértice,
+        e classificando todos os arcos do dígrafo.
+
+        Returns:
+            dict: Dicionário contendo:
+                - 'pais': Dicionário de pais na floresta DFS.
+                - 'tempo_entrada': Dicionário com o tempo de descoberta de cada vértice.
+                - 'tempo_saida': Dicionário com o tempo de finalização de cada vértice.
+                - 'tipos_arcos': Dicionário classificando os arcos em 'arvore', 
+                                 'retorno', 'avanco' e 'cruzamento'.
+        """
+        lista_adj = self.criar_lista_adjacencia()
+        
+        # Inicialização das estruturas de dados
+        cores = {v: 'BRANCO' for v in self.vertices_ordenados}
+        pais = {v: None for v in self.vertices_ordenados}
+        tempo_entrada = {}
+        tempo_saida = {}
+        tipos_arcos = {
+            'arvore': [],
+            'retorno': [],
+            'avanco': [],
+            'cruzamento': []
+        }
+        self.tempo = 0
+
+        def _dfs_visit(u):
+            """Função recursiva auxiliar que explora um vértice 'u'."""
+            self.tempo += 1
+            tempo_entrada[u] = self.tempo
+            cores[u] = 'CINZA'
+
+            for v in lista_adj[u]:
+                if cores[v] == 'BRANCO':
+                    # ARCO DE ÁRVORE: encontramos um novo vértice
+                    pais[v] = u
+                    tipos_arcos['arvore'].append((u, v))
+                    _dfs_visit(v)
+                elif cores[v] == 'CINZA':
+                    # ARCO DE RETORNO: encontramos um ciclo
+                    tipos_arcos['retorno'].append((u, v))
+                elif cores[v] == 'PRETO':
+                    # Pode ser AVANÇO ou CRUZAMENTO
+                    if tempo_entrada[u] < tempo_entrada[v]:
+                        tipos_arcos['avanco'].append((u, v))
+                    else:
+                        tipos_arcos['cruzamento'].append((u, v))
+            
+            cores[u] = 'PRETO'
+            self.tempo += 1
+            tempo_saida[u] = self.tempo
+
+        # Loop principal que garante que todos os vértices sejam visitados (para dígrafos desconexos)
+        for vertice in self.vertices_ordenados:
+            if cores[vertice] == 'BRANCO':
+                _dfs_visit(vertice)
+        
+        return {
+            'pais': pais,
+            'tempo_entrada': tempo_entrada,
+            'tempo_saida': tempo_saida,
+            'tipos_arcos': tipos_arcos
+        }
