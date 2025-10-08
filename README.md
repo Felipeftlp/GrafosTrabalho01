@@ -18,6 +18,8 @@ O projeto está organizado de forma modular para separar responsabilidades e fac
 - **`digrafo.py`**: Contém a classe `Digrafo`, que modela grafos direcionados e implementa BFS.
 - **`utils.py`**: Módulo com funções auxiliares e de conversão, como `matriz -> lista` e `lista -> matriz`.
 - **`test_bfs.py`**: Testes automatizados para validar as implementações de BFS e operações com vértices.
+- **`test_dfs.py`**: Testes automatizados para validar as implementações de DFS e operações.
+- **`visualizacao_demo.py`**: Contém uma parte gráfica simples para representar os grafos e buscas.
 - **`.gitignore`**: Define os arquivos e pastas que devem ser ignorados pelo Git (ex: `__pycache__`, ambientes virtuais).
 - **`README.md`**: Documentação do projeto (este arquivo).
 
@@ -62,6 +64,12 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 -   **(10)** Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
 -   **(13)** Busca em Largura (BFS) em grafos não-direcionados.
 -   **(19)** Busca em Largura (BFS) em dígrafos.
+-   **(11)** Função que determina se um grafo é conexo ou não
+-   **(14)** Busca em Profundidade (DFS), com determinação de arestas de retorno
+-   **(15)** Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a função lowpt
+-   **(20)** Busca em profundidade (DFS) para DIGRAFOS, com determinação de profundidade de entrada/saída e tipos de arestas
+
+
 
 ### A Implementar 🚧
 
@@ -72,18 +80,14 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 -   (8) Função que determina o número total de arestas.
 <!-- -   (9) Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências. -->
 <!-- -   (10) Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências. -->
--   (11) Função que determina se um grafo é conexo ou não.
 -   (12) **Determinar se um grafo é bipartido (OPC = 1,0 ponto)**
 <!-- -   (13) Busca em Largura, a partir de um vértice específico. -->
--   (14) Busca em Profundidade, com determinação de arestas de retorno, a partir de um vértice específico.
--   (15) Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a função *lowpt*.
 
 #### B. Para DÍGRAFOS (Direcionados)
 -   (16) Representação do Dígrafo a partir da Matriz de Adjacências.
 -   (17) Representação do Dígrafo a partir da Matriz de Incidência.
 -   (18) **Determinação do Grafo Subjacente (OPC= 0,5 ponto)**
 <!-- -   (19) Busca em largura. -->
--   (20) Busca em profundidade, com determinação de profundidade de entrada e de saída de cada vértice, e arestas de árvore, retorno, avanço e cruzamento.
 
 ---
 
@@ -91,4 +95,5 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 - **Felipe Freitas Lopes**
 - **Giliardo Júlio de Medeiros Júnior**
 - **Ianco Soares Oliveira**
+- **Kaio Eduardo Alves de Lima**
 - **[COLOQUEM SEUS NOMES EM ORDEM ALFABÉTICA AQUI]**
