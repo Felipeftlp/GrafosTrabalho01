@@ -198,3 +198,72 @@ class Digrafo:
             'tempo_saida': tempo_saida,
             'tipos_arcos': tipos_arcos
         }
+    
+    # =========================================================================
+    # VERIFICAÇÃO DE DÍGRAFO BIPARTIDO
+    # =========================================================================
+    
+    def eh_bipartido(self):
+        """
+        Determina se o dígrafo é bipartido.
+        
+        Um dígrafo é bipartido se o seu grafo subjacente (ignorando a direção dos arcos)
+        é bipartido. Isso significa que podemos particionar os vértices em dois conjuntos
+        de tal forma que todos os arcos conectem vértices de conjuntos diferentes.
+        
+        Returns:
+            dict: Dicionário contendo:
+                - 'eh_bipartido': Boolean indicando se o dígrafo é bipartido
+                - 'particoes': Se bipartido, tupla com as duas partições
+                - 'coloracao': Dicionário com a coloração de cada vértice
+                - 'ciclo_impar': Se não for bipartido, informação sobre ciclo ímpar
+        """
+        if not self.vertices_ordenados:
+            return {
+                'eh_bipartido': True,
+                'particoes': (set(), set()),
+                'coloracao': {},
+                'ciclo_impar': None
+            }
+        
+        # Cria grafo subjacente (não-direcionado)
+        grafo_subjacente = self.obter_grafo_subjacente()
+        
+        # Usa a implementação de bipartição do grafo subjacente
+        return grafo_subjacente.eh_bipartido()
+    
+    # =========================================================================
+    # DETERMINAÇÃO DO GRAFO SUBJACENTE
+    # =========================================================================
+    
+    def obter_grafo_subjacente(self):
+        """
+        Determina o grafo subjacente do dígrafo.
+        
+        O grafo subjacente de um dígrafo é obtido ignorando a direção dos arcos,
+        ou seja, convertendo cada arco direcionado (u,v) em uma aresta não-direcionada {u,v}.
+        Arcos múltiplos na mesma direção ou direções opostas resultam em uma única aresta.
+        Auto-loops são preservados como arestas no grafo subjacente.
+        
+        Returns:
+            Grafo: Nova instância da classe Grafo representando o grafo subjacente
+        """
+        from grafo import Grafo
+        
+        # Coleta todas as arestas não-direcionadas (sem duplicatas)
+        arestas_subjacente = set()
+        
+        for origem, destino in self.arcos:
+            # Para auto-loops, mantém como está
+            if origem == destino:
+                arestas_subjacente.add((origem, destino))
+            else:
+                # Para arcos normais, usa tuple ordenada para evitar duplicatas
+                aresta = tuple(sorted([origem, destino]))
+                arestas_subjacente.add(aresta)
+        
+        # Converte o conjunto de volta para lista
+        arestas_lista = list(arestas_subjacente)
+        
+        # Cria e retorna o grafo subjacente
+        return Grafo(self.vertices_ordenados, arestas_lista)

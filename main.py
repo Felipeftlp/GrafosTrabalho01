@@ -99,6 +99,7 @@ def main():
     print(f"Vértice 1 e 2 são adjacentes: {meu_grafo.is_adjacente('1', '2')}")
     print(f"Quantidade de vértices: {meu_grafo.get_num_vertices()}")
     print(f"Quantidade de arestas: {meu_grafo.get_num_arestas()}")
+    print(f"O grafo é bipartido? {meu_grafo.eh_bipartido()['eh_bipartido']}")
 
 if __name__ == "__main__":
     main()
