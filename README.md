@@ -48,6 +48,30 @@ O projeto está organizado de forma modular para separar responsabilidades e fac
    ```
 5. Siga as instruções no terminal para inserir os vértices e as arestas do grafo desejado.
 
+### 🧪 Como Executar os Testes
+Para testar as funcionalidades implementadas:
+
+1. **Testes de Grafos (não-direcionados)**:
+   ```sh
+   python test_grafo.py
+   ```
+
+2. **Testes de Dígrafos (direcionados)**:
+   ```sh
+   python test_digrafo.py
+   ```
+
+3. **Testes BFS/DFS**:
+   ```sh
+   python test_bfs.py
+   python test_dfs.py
+   ```
+
+4. **Visualização Gráfica**:
+   ```sh
+   python visualizacao_demo.py
+   ```
+
 ---
 
 ## ✅ Funcionalidades
@@ -60,34 +84,26 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 -   Representação de grafos por **Matriz de Incidência**.
 -   Conversão de **Matriz de Adjacências para Lista de Adjacências**.
 -   Conversão de **Lista de Adjacências para Matriz de Adjacências**.
+-   **(5)** Função que calcula o grau de cada vértice.
+-   **(6)** Função que determina se dois vértices são adjacentes.
+-   **(7)** Função que determina o número total de vértices.
+-   **(8)** Função que determina o número total de arestas.
 -   **(9)** Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências.
 -   **(10)** Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências.
--   **(13)** Busca em Largura (BFS) em grafos não-direcionados.
--   **(19)** Busca em Largura (BFS) em dígrafos.
 -   **(11)** Função que determina se um grafo é conexo ou não
+-   **(12)** Determinar se um grafo é bipartido
+-   **(13)** Busca em Largura (BFS) em grafos não-direcionados.
 -   **(14)** Busca em Profundidade (DFS), com determinação de arestas de retorno
 -   **(15)** Determinação de articulações e blocos (biconectividade), utilizando obrigatoriamente a função lowpt
+-   **(16)** Representação do Dígrafo a partir da Matriz de Adjacências.
+-   **(17)** Representação do Dígrafo a partir da Matriz de Incidência.
+-   **(18)** Determinação do Grafo Subjacente
+-   **(19)** Busca em Largura (BFS) em dígrafos.
 -   **(20)** Busca em profundidade (DFS) para DIGRAFOS, com determinação de profundidade de entrada/saída e tipos de arestas
-
-
+-   **Verificação de dígrafo bipartido** - Usa o grafo subjacente para determinar se dígrafo é bipartido
 
 ### A Implementar 🚧
-
-#### A. Para GRAFOS (Não-Direcionados)
--   (5) Função que calcula o grau de cada vértice.
--   (6) Função que determina se dois vértices são adjacentes.
--   (7) Função que determina o número total de vértices.
--   (8) Função que determina o número total de arestas.
-<!-- -   (9) Inclusão de um novo vértice usando Lista de Adjacências e Matriz de Adjacências. -->
-<!-- -   (10) Exclusão de um vértice existente usando Lista de Adjacências e Matriz de Adjacências. -->
--   (12) **Determinar se um grafo é bipartido (OPC = 1,0 ponto)**
-<!-- -   (13) Busca em Largura, a partir de um vértice específico. -->
-
-#### B. Para DÍGRAFOS (Direcionados)
--   (16) Representação do Dígrafo a partir da Matriz de Adjacências.
--   (17) Representação do Dígrafo a partir da Matriz de Incidência.
--   (18) **Determinação do Grafo Subjacente (OPC= 0,5 ponto)**
-<!-- -   (19) Busca em largura. -->
+✅ **Todas as funcionalidades solicitadas foram implementadas!**
 
 ---
 
