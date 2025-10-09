@@ -102,34 +102,78 @@ class Grafo:
     # ITEM 9 - INCLUSÃO DE VÉRTICE
     # =========================================================================
     
-    def incluir_vertice_lista_adjacencia(self, lista_adj, novo_vertice):
+    def incluir_vertice_lista_adjacencia(self, lista_adj, novo_vertice, arestas_novas=None):
         """
         Inclui um novo vértice na representação de lista de adjacências.
         
         Args:
             lista_adj (dict): Lista de adjacências atual do grafo
             novo_vertice (str): Identificador do novo vértice a ser adicionado
+            arestas_novas (list, optional): Lista de tuplas (novo_vertice, vertice_existente) 
+                                           ou (vertice_existente, novo_vertice) representando 
+                                           as arestas do novo vértice. Default: None (vértice isolado)
             
         Returns:
-            dict: Nova lista de adjacências com o vértice incluído
+            dict: Nova lista de adjacências com o vértice e suas arestas incluídos
             
         Raises:
-            ValueError: Se o vértice já existir na lista de adjacências
+            ValueError: Se o vértice já existir na lista de adjacências ou se alguma aresta
+                       conectar a um vértice inexistente
+        
+        Exemplo:
+            >>> lista = {'a': ['b'], 'b': ['a']}
+            >>> nova = grafo.incluir_vertice_lista_adjacencia(lista, 'c', [('c', 'a')])
+            >>> # Resultado: {'a': ['b', 'c'], 'b': ['a'], 'c': ['a']}
         """
         if novo_vertice in lista_adj:
             raise ValueError(f"O vértice '{novo_vertice}' já existe no grafo.")
         
-        nova_lista = lista_adj.copy()
+        # Cria uma cópia da lista de adjacências
+        nova_lista = {v: vizinhos.copy() for v, vizinhos in lista_adj.items()}
         nova_lista[novo_vertice] = []
+        
+        # Se há arestas a serem adicionadas, valida e adiciona
+        if arestas_novas:
+            for aresta in arestas_novas:
+                if len(aresta) != 2:
+                    raise ValueError(f"Aresta inválida: {aresta}. Deve ser uma tupla (v1, v2).")
+                
+                v1, v2 = aresta
+                
+                # Verifica se a aresta envolve o novo vértice
+                if novo_vertice not in aresta:
+                    raise ValueError(
+                        f"Aresta {aresta} não conecta ao novo vértice '{novo_vertice}'."
+                    )
+                
+                # Identifica o outro vértice da aresta
+                outro_vertice = v2 if v1 == novo_vertice else v1
+                
+                # Verifica se o outro vértice existe
+                if outro_vertice not in nova_lista:
+                    raise ValueError(
+                        f"Não é possível adicionar aresta {aresta}: "
+                        f"vértice '{outro_vertice}' não existe no grafo."
+                    )
+                
+                # Adiciona a aresta (bidirecional)
+                if outro_vertice not in nova_lista[novo_vertice]:
+                    nova_lista[novo_vertice].append(outro_vertice)
+                if novo_vertice not in nova_lista[outro_vertice]:
+                    nova_lista[outro_vertice].append(novo_vertice)
+        
         return nova_lista
 
-    def incluir_vertice_matriz_adjacencia(self, matriz_adj, novo_vertice):
+    def incluir_vertice_matriz_adjacencia(self, matriz_adj, novo_vertice, arestas_novas=None):
         """
         Inclui um novo vértice na representação de matriz de adjacências.
         
         Args:
             matriz_adj (list): Matriz de adjacências atual do grafo (lista de listas)
             novo_vertice (str): Identificador do novo vértice a ser adicionado
+            arestas_novas (list, optional): Lista de tuplas (novo_vertice, vertice_existente) 
+                                           ou (vertice_existente, novo_vertice) representando 
+                                           as arestas do novo vértice. Default: None (vértice isolado)
             
         Returns:
             tuple: (nova_matriz, novos_vertices_ordenados, novo_mapa_vertices)
@@ -138,7 +182,15 @@ class Grafo:
                 - novo_mapa_vertices: Dicionário atualizado de mapeamento
                 
         Raises:
-            ValueError: Se o vértice já existir no grafo
+            ValueError: Se o vértice já existir no grafo ou se alguma aresta
+                       conectar a um vértice inexistente
+        
+        Exemplo:
+            >>> matriz = [[0, 1], [1, 0]]
+            >>> vertices = ['a', 'b']
+            >>> nova_m, novos_v, mapa = grafo.incluir_vertice_matriz_adjacencia(
+            ...     matriz, 'c', [('c', 'a')])
+            >>> # nova_m será 3x3 com conexão entre 'a' e 'c'
         """
         if novo_vertice in self.mapa_vertices:
             raise ValueError(f"O vértice '{novo_vertice}' já existe no grafo.")
@@ -149,11 +201,42 @@ class Grafo:
         
         nova_matriz = [[0] * novo_tamanho for _ in range(novo_tamanho)]
         
+        # Copia os valores da matriz original para a nova matriz
         for i, v_orig in enumerate(self.vertices_ordenados):
             for j, v_dest in enumerate(self.vertices_ordenados):
                 nova_pos_i = novo_mapa[v_orig]
                 nova_pos_j = novo_mapa[v_dest]
                 nova_matriz[nova_pos_i][nova_pos_j] = matriz_adj[i][j]
+        
+        # Se há arestas a serem adicionadas, valida e adiciona
+        if arestas_novas:
+            for aresta in arestas_novas:
+                if len(aresta) != 2:
+                    raise ValueError(f"Aresta inválida: {aresta}. Deve ser uma tupla (v1, v2).")
+                
+                v1, v2 = aresta
+                
+                # Verifica se a aresta envolve o novo vértice
+                if novo_vertice not in aresta:
+                    raise ValueError(
+                        f"Aresta {aresta} não conecta ao novo vértice '{novo_vertice}'."
+                    )
+                
+                # Identifica o outro vértice da aresta
+                outro_vertice = v2 if v1 == novo_vertice else v1
+                
+                # Verifica se o outro vértice existe
+                if outro_vertice not in novo_mapa:
+                    raise ValueError(
+                        f"Não é possível adicionar aresta {aresta}: "
+                        f"vértice '{outro_vertice}' não existe no grafo."
+                    )
+                
+                # Adiciona a aresta na matriz (bidirecional)
+                idx_novo = novo_mapa[novo_vertice]
+                idx_outro = novo_mapa[outro_vertice]
+                nova_matriz[idx_novo][idx_outro] = 1
+                nova_matriz[idx_outro][idx_novo] = 1
         
         return nova_matriz, novos_vertices, novo_mapa
 
@@ -225,6 +308,102 @@ class Grafo:
             idx_nova_linha += 1
         
         return nova_matriz, novos_vertices, novo_mapa
+
+    # =========================================================================
+    # MÉTODOS PARA MODIFICAR O GRAFO DIRETAMENTE
+    # =========================================================================
+    
+    def incluir_vertice(self, novo_vertice, arestas_novas=None):
+        """
+        Inclui um novo vértice diretamente no grafo, modificando suas estruturas internas.
+        
+        Args:
+            novo_vertice (str): Identificador do novo vértice a ser adicionado
+            arestas_novas (list, optional): Lista de tuplas (novo_vertice, vertice_existente) 
+                                           ou (vertice_existente, novo_vertice) representando 
+                                           as arestas do novo vértice. Default: None (vértice isolado)
+        
+        Raises:
+            ValueError: Se o vértice já existir no grafo ou se alguma aresta
+                       conectar a um vértice inexistente
+        
+        Exemplo:
+            >>> grafo = Grafo({'a', 'b'}, [('a', 'b')])
+            >>> grafo.incluir_vertice('c', [('c', 'a')])
+            >>> # Grafo agora tem vértices {a, b, c} e arestas [(a,b), (c,a)]
+        """
+        if novo_vertice in self.vertices_ordenados:
+            raise ValueError(f"O vértice '{novo_vertice}' já existe no grafo.")
+        
+        # Valida as arestas antes de modificar o grafo
+        if arestas_novas:
+            for aresta in arestas_novas:
+                if len(aresta) != 2:
+                    raise ValueError(f"Aresta inválida: {aresta}. Deve ser uma tupla (v1, v2).")
+                
+                v1, v2 = aresta
+                
+                # Verifica se a aresta envolve o novo vértice
+                if novo_vertice not in aresta:
+                    raise ValueError(
+                        f"Aresta {aresta} não conecta ao novo vértice '{novo_vertice}'."
+                    )
+                
+                # Identifica o outro vértice da aresta
+                outro_vertice = v2 if v1 == novo_vertice else v1
+                
+                # Verifica se o outro vértice existe
+                if outro_vertice not in self.vertices_ordenados:
+                    raise ValueError(
+                        f"Não é possível adicionar aresta {aresta}: "
+                        f"vértice '{outro_vertice}' não existe no grafo."
+                    )
+        
+        # Adiciona o vértice
+        self.vertices_ordenados = sorted(self.vertices_ordenados + [novo_vertice])
+        self.num_vertices = len(self.vertices_ordenados)
+        self.mapa_vertices = {vertice: i for i, vertice in enumerate(self.vertices_ordenados)}
+        
+        # Adiciona as arestas
+        if arestas_novas:
+            for aresta in arestas_novas:
+                # Normaliza a aresta para evitar duplicatas (ex: (a,b) e (b,a))
+                aresta_normalizada = tuple(sorted(aresta))
+                if aresta_normalizada not in self.arestas:
+                    self.arestas.append(aresta_normalizada)
+            
+            self.num_arestas = len(self.arestas)
+    
+    def excluir_vertice(self, vertice_remover):
+        """
+        Exclui um vértice diretamente do grafo, modificando suas estruturas internas.
+        Remove também todas as arestas conectadas a esse vértice.
+        
+        Args:
+            vertice_remover (str): Identificador do vértice a ser removido
+        
+        Raises:
+            ValueError: Se o vértice não existir no grafo
+        
+        Exemplo:
+            >>> grafo = Grafo({'a', 'b', 'c'}, [('a', 'b'), ('b', 'c')])
+            >>> grafo.excluir_vertice('b')
+            >>> # Grafo agora tem vértices {a, c} e arestas [] (b conectava a e c)
+        """
+        if vertice_remover not in self.vertices_ordenados:
+            raise ValueError(f"O vértice '{vertice_remover}' não existe no grafo.")
+        
+        # Remove o vértice
+        self.vertices_ordenados = [v for v in self.vertices_ordenados if v != vertice_remover]
+        self.num_vertices = len(self.vertices_ordenados)
+        self.mapa_vertices = {vertice: i for i, vertice in enumerate(self.vertices_ordenados)}
+        
+        # Remove todas as arestas que conectam ao vértice removido
+        self.arestas = [
+            aresta for aresta in self.arestas 
+            if vertice_remover not in aresta
+        ]
+        self.num_arestas = len(self.arestas)
 
     # =========================================================================
     # ITEM 13 - BUSCA EM LARGURA (BFS)
