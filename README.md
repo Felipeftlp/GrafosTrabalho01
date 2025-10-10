@@ -108,8 +108,8 @@ Esta seção detalha o que já foi implementado e o que está planejado para o p
 ---
 
 ## 👨‍💻 Autores
+- **Djavan Costa Oliveira**
 - **Felipe Freitas Lopes**
 - **Giliardo Júlio de Medeiros Júnior**
 - **Ianco Soares Oliveira**
 - **Kaio Eduardo Alves de Lima**
-- **[COLOQUEM SEUS NOMES EM ORDEM ALFABÉTICA AQUI]**
